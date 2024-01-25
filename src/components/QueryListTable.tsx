@@ -1,7 +1,7 @@
 // import { SearchCategory } from '../types'
 import { useGlobal } from "../Context";
 import OneQuery from "./OneQuery";
-import { SearchCategory, SearchCategoryParams } from "../types";
+import {   SearchCategoryParams } from "../types";
 import { useEffect, useState } from "react";
 
 type QueryListTableProps = {
@@ -17,31 +17,39 @@ const QueryListTable: React.FC<QueryListTableProps> = () => {
     if (query.replace(/\s/g, "") === ''){
       return false
     }
-    const keywordWithoutSpaces = search.replace(/\s/g, "");
-    const queryWithoutSpaces = query.replace(/\s/g, "");
-    console.log(keywordWithoutSpaces, queryWithoutSpaces);
+    const keywordWithoutSpaces = search.replace(/\s+/g, " ");
+    const queryWithoutSpaces = query.replace(/\s+/g, " ");
+    console.log( keywordWithoutSpaces.toLocaleLowerCase().indexOf(queryWithoutSpaces),keywordWithoutSpaces, queryWithoutSpaces)
     return (
       keywordWithoutSpaces.toLocaleLowerCase().indexOf(queryWithoutSpaces) === 0
     );
   };
 
+
+
+
 useEffect(() => {
   let newShownQueries: SearchCategoryParams[] = [];
+
   results.forEach((result) => {
     result.boundValues.forEach((boundValue) => {
-      const { value, popularity } = boundValue;
-      if (!checkSearchRelevant(value, query)) {
+      let { value, popularity } = boundValue;
+      value = value.replace(/\s+/g, " ");
+
+      const queryWithoutRedundantSpaces = query.replace(/\s+/g, " ");
+      if (!checkSearchRelevant(value, queryWithoutRedundantSpaces)) {
         return;
       }
       const indexOfQuery = value
         .toLocaleLowerCase()
-        .indexOf(query.toLocaleLowerCase());
+        .indexOf(queryWithoutRedundantSpaces.toLocaleLowerCase());
+        console.log(value, indexOfQuery, queryWithoutRedundantSpaces)
       const beforeQuery = value.slice(0, indexOfQuery);
-      const afterQuery = value.slice(indexOfQuery + query.length);
-
+      const afterQuery = value.slice(indexOfQuery + queryWithoutRedundantSpaces.length);
+      console.log(beforeQuery, afterQuery)
       newShownQueries.push({
         boldedPartBefore: beforeQuery,
-        normalText: query,
+        normalText: queryWithoutRedundantSpaces,
         boldedPartAfter: afterQuery,
         popularity,
       });
@@ -52,7 +60,7 @@ useEffect(() => {
   newShownQueries.sort((a, b) => b.popularity - a.popularity);
 
   setShownQueries(newShownQueries);
-  console.log(shownQueries);
+
 }, [query, results]);
 
   return (

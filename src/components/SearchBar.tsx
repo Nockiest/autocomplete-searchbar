@@ -12,22 +12,7 @@ type AutocompleteSearchBarParamas = {
 const AutocompleteSearchBar: React.FC<AutocompleteSearchBarParamas> = () => {
   const { query, setQuery } = useGlobal();
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (query.length > 0) {
-  //       try {
-  //         const response = await axios.get(`/search?query=${query}`);
-  //         setResults(response.data);
-  //       } catch (error) {
-  //         console.error('Error fetching search results:', error);
-  //       }
-  //     } else {
-  //       setResults([]);
-  //     }
-  //   };
 
-  //   fetchData();
-  // }, [query, setResults]);
 
   return (
     <div

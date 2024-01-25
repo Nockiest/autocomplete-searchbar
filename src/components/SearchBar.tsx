@@ -12,8 +12,6 @@ type AutocompleteSearchBarParamas = {
 const AutocompleteSearchBar: React.FC<AutocompleteSearchBarParamas> = () => {
   const { query, setQuery } = useGlobal();
 
-
-
   return (
     <div
       style={{

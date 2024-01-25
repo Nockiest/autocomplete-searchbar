@@ -28,6 +28,9 @@ const QueryListTable: React.FC<QueryListTableProps> = () => {
 
 
 
+
+
+
 useEffect(() => {
   let newShownQueries: SearchCategoryParams[] = [];
 

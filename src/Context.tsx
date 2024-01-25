@@ -9,6 +9,7 @@ type GlobalContextType = {
   setResults: React.Dispatch<React.SetStateAction<SearchCategory[]>>;
 };
 
+
 type DbSearchCategory = {
   id: number
   keyword: string
@@ -24,7 +25,9 @@ export const GlobalContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [query, setQuery] = useState<string>("");
+
   const [results, setResults] = useState<SearchCategory[]>([]);
+
   let globalContextValue = {
     query,
     setQuery,
@@ -65,6 +68,8 @@ export const GlobalContextProvider: React.FC<{ children: ReactNode }> = ({
       });
   }, [query ]);
 
+
+
   return (
     <GlobalContext.Provider value={globalContextValue}>
       {children}
@@ -103,5 +108,3 @@ export const useGlobal = () => {
 //   {"id":7,"keyword":"pede","boundValues":[{"popularity":58,"value":"vivamus tortor duis mattis egestas metus aenean fermentum donec ut mauris eget massa tempor pede risus auctor sed tristique in tempus sit amet sem fusce consequat nulla nisl nunc nisl duis bibendum"},{"popularity":77,"value":"mauris laoreet ut rhoncus aliquet pulvinar sed nisl nunc rhoncus pede turpis a pede posuere nonummy integer non velit donec diam neque vestibulum eget vulputate ut ultrices vel augue"}],"popularity":75},
 //   {"id":8,"keyword":"nisi","boundValues":[{"popularity":2,"value":"eget orci vehicula condimentum curabitur in libero ut massa volutpat convallis nisi posuere cubilia curae mauris viverra diam vitae quam suspendisse potenti nullam porttitor lacus at turpis donec"},{"popularity":44,"value":"nascetur ridiculus mus vivamus vestibulum sagittis sapien cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus nisi congue eget semper rutrum nulla nunc purus phasellus in felis donec semper sapien"},{"popularity":1,"value":"risus auctor sed tristique in tempus sit amet sem fusce nisi amet cursus id turpis integer aliquet massa id lobortis convallis tortor risus dapibus"}],"popularity":63},
 //   {"id":9,"keyword":"habitasse","boundValues":[{"popularity":99,"value":"et ultrices posuere cubilia curae nulla dapibus dolor vel est donec odio habitasse parturient montes nascetur ridiculus mus vivamus vestibulum sagittis sapien cum sociis natoque penatibus et magnis"},{"popularity":23,"value":"facilisi cras non velit nec nisi vulputate nonummy maecenas tincidunt lacus at velit vivamus vel nulla eget habitasse id lobortis convallis tortor risus dapibus augue vel accumsan tellus"}],"popularity":26},
-
-// ]);

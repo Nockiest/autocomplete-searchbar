@@ -4,12 +4,9 @@ import OneQuery from "./OneQuery";
 import {   SearchCategoryParams } from "../types";
 import { useEffect, useState } from "react";
 
-type QueryListTableProps = {
-  // results: SearchCategory[]
-  // query: string
-};
 
-const QueryListTable: React.FC<QueryListTableProps> = () => {
+
+const QueryListTable  = () => {
   const { results, query } = useGlobal();
   const [shownQueries, setShownQueries] = useState<SearchCategoryParams[]>([]);
 
@@ -19,9 +16,10 @@ const QueryListTable: React.FC<QueryListTableProps> = () => {
     }
     const keywordWithoutSpaces = search.replace(/\s+/g, " ");
     const queryWithoutSpaces = query.replace(/\s+/g, " ");
-    console.log( keywordWithoutSpaces.toLocaleLowerCase().indexOf(queryWithoutSpaces),keywordWithoutSpaces, queryWithoutSpaces)
+
+    // console.log( keywordWithoutSpaces.toLocaleLowerCase().indexOf(queryWithoutSpaces),keywordWithoutSpaces, queryWithoutSpaces)
     return (
-      keywordWithoutSpaces.toLocaleLowerCase().indexOf(queryWithoutSpaces) === 0
+      keywordWithoutSpaces.toLocaleLowerCase().indexOf(queryWithoutSpaces.toLocaleLowerCase()) === 0
     );
   };
 
@@ -38,7 +36,7 @@ useEffect(() => {
     result.boundValues.forEach((boundValue) => {
       let { value, popularity } = boundValue;
       value = value.replace(/\s+/g, " ");
-
+      // console.log(boundValue)
       const queryWithoutRedundantSpaces = query.replace(/\s+/g, " ");
       if (!checkSearchRelevant(value, queryWithoutRedundantSpaces)) {
         return;
@@ -46,10 +44,9 @@ useEffect(() => {
       const indexOfQuery = value
         .toLocaleLowerCase()
         .indexOf(queryWithoutRedundantSpaces.toLocaleLowerCase());
-        console.log(value, indexOfQuery, queryWithoutRedundantSpaces)
       const beforeQuery = value.slice(0, indexOfQuery);
       const afterQuery = value.slice(indexOfQuery + queryWithoutRedundantSpaces.length);
-      console.log(beforeQuery, afterQuery)
+
       newShownQueries.push({
         boldedPartBefore: beforeQuery,
         normalText: queryWithoutRedundantSpaces,

@@ -1,7 +1,6 @@
 import "./App.css";
 import QueryListTable from "./components/QueryListTable";
 import AutocompleteSearchBar from "./components/SearchBar";
-// import QueryListTable from "./components/queryListTable";
 
 import { GlobalContextProvider } from "./Context";
 
@@ -16,9 +15,14 @@ function App() {
           alignItems: "center",
           height: "100vh",
           flexDirection: "column",
-          // width: '300px'
         }}
       >
+        <div style={{
+            position: "absolute",
+            top: "30%",
+            left: "50%",
+            transform: "translate(-50% )",
+          }}>Googleplex</div>
         <div
           style={{
             position: "absolute",

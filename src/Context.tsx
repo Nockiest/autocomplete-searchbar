@@ -1,6 +1,6 @@
 import { ReactNode, useContext, useEffect, useState } from "react";
 import { createContext } from "react";
-import { SearchCategory } from "./types";
+import {   SearchCategory } from "./types";
 import axios from "axios";
 type GlobalContextType = {
   query: string;
@@ -10,12 +10,7 @@ type GlobalContextType = {
 };
 
 
-type DbSearchCategory = {
-  id: number
-  keyword: string
-  boundvalues: string
-  popularity: number
-}
+
 
 export const GlobalContext = createContext<GlobalContextType | undefined>(
   undefined
@@ -35,36 +30,31 @@ export const GlobalContextProvider: React.FC<{ children: ReactNode }> = ({
     setResults,
   };
   useEffect(() => {
-    function BoundValue (popularity: number, value:string) {
-      // this.popularity = popularity;
-      // this.value = value;
-      return {popularity, value}
-    }
+
     axios
-      .get("http://localhost:3002/search")
+      .get("http://localhost:3002/search", { params: { query } })
       .then((response: any) => {
         const data = response.data;
-        // console.log('yyy' ,data );
 
-        const updatedResults = data.map((value:DbSearchCategory  ) => {
-          // console.log('ran', value)
-          let { boundvalues, ...rest } = value;
-          // console.log('d', boundvalues)
-          const parsedValue = JSON.parse (boundvalues, );
-          // console.log('parsed', parsedValue, )
-          boundvalues = JSON.parse (boundvalues, );
-          return {
-            ...rest,
-            boundValues: boundvalues,
-          };
-        });
-        // console.log(updatedResults)
-        setResults(updatedResults);
+        if (data === null){
+          return
+        }
+        // const updatedResults = data.map((value:DbSearchCategory ) => {
+        //   let { boundValues, ...rest } = value;
+        //   console.log(boundValues,  rest, value )
+        //   // boundValues = JSON.parse (boundValues, );
+        //   return {
+        //     ...rest,
+        //     boundValues: boundValues,
+        //   };
+        // });
+        console.log('data', data)
+        setResults(data);
 
         // Handle the response
       })
       .catch((error: any) => {
-        // Handle any errors
+        throw new Error('problem with fetching data')
       });
   }, [query ]);
 

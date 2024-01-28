@@ -1,71 +1,44 @@
-// import { SearchCategory } from '../types'
 import { useGlobal } from "../Context";
 import OneQuery from "./OneQuery";
-import {   SearchCategoryParams } from "../types";
+import { SearchCategoryParams } from "../types";
 import { useEffect, useState } from "react";
 
-
-
-const QueryListTable  = () => {
+const QueryListTable = () => {
   const { results, query } = useGlobal();
-  const [shownQueries, setShownQueries] = useState<SearchCategoryParams[]>([]);
+  const [shownResults, setShownResults] = useState<SearchCategoryParams[]>([]);
 
-  const checkSearchRelevant = (search: string, query: string) => {
-    if (query.replace(/\s/g, "") === ''){
-      return false
-    }
-    const keywordWithoutSpaces = search.replace(/\s+/g, " ");
-    const queryWithoutSpaces = query.replace(/\s+/g, " ");
+  useEffect(() => {
+    let newShownResults: SearchCategoryParams[] = [];
 
-    // console.log( keywordWithoutSpaces.toLocaleLowerCase().indexOf(queryWithoutSpaces),keywordWithoutSpaces, queryWithoutSpaces)
-    return (
-      keywordWithoutSpaces.toLocaleLowerCase().indexOf(queryWithoutSpaces.toLocaleLowerCase()) === 0
-    );
-  };
+    results.forEach((result) => {
+      console.log(result);
+      const fullquery = result.fullquery.replace(/\s+/g, " ");
 
-
-
-
-
-
-
-useEffect(() => {
-  let newShownQueries: SearchCategoryParams[] = [];
-
-  results.forEach((result) => {
-    result.boundValues.forEach((boundValue) => {
-      let { value, popularity } = boundValue;
-      value = value.replace(/\s+/g, " ");
-      // console.log(boundValue)
       const queryWithoutRedundantSpaces = query.replace(/\s+/g, " ");
-      if (!checkSearchRelevant(value, queryWithoutRedundantSpaces)) {
-        return;
-      }
-      const indexOfQuery = value
+
+      const indexOfQuery = fullquery
         .toLocaleLowerCase()
         .indexOf(queryWithoutRedundantSpaces.toLocaleLowerCase());
-      const beforeQuery = value.slice(0, indexOfQuery);
-      const afterQuery = value.slice(indexOfQuery + queryWithoutRedundantSpaces.length);
+      const beforeQuery = fullquery.slice(0, indexOfQuery);
+      const afterQuery = fullquery.slice(
+        indexOfQuery + queryWithoutRedundantSpaces.length
+      );
 
-      newShownQueries.push({
+      newShownResults.push({
         boldedPartBefore: beforeQuery,
         normalText: queryWithoutRedundantSpaces,
         boldedPartAfter: afterQuery,
-        popularity,
+        popularity: result.popularity,
       });
     });
-  });
-
-  // Sort the newShownQueries array based on popularity in descending order
-  newShownQueries.sort((a, b) => b.popularity - a.popularity);
-
-  setShownQueries(newShownQueries);
-
-}, [query, results]);
+    // Sort the newShownQueries array based on popularity in descending order
+    newShownResults.sort((a, b) => b.popularity - a.popularity);
+    setShownResults(newShownResults);
+  }, [query, results]);
 
   return (
     <>
-      {shownQueries.length > 0 && query && (
+      {shownResults.length > 0 && query && (
         <table
           style={{
             width: "100%",
@@ -76,14 +49,17 @@ useEffect(() => {
           }}
         >
           <tbody>
-            {shownQueries.map((shownQuery, key) => {
+            {shownResults.slice(0, 10).map((result, key) => {
+              // this will only show the first 10 queries
               return (
-                <OneQuery
+
+              <OneQuery
                   key={key}
-                  boldedPartBefore={shownQuery.boldedPartBefore}
-                  normalText={shownQuery.normalText}
-                  boldedPartAfter={shownQuery.boldedPartAfter}
+                  boldedPartBefore={result.boldedPartBefore}
+                  normalText={result.normalText}
+                  boldedPartAfter={result.boldedPartAfter}
                 />
+
               );
             })}
           </tbody>

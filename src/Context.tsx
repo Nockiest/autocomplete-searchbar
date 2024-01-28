@@ -1,12 +1,13 @@
 import { ReactNode, useContext, useEffect, useState } from "react";
 import { createContext } from "react";
-import {   SearchCategory } from "./types";
+
 import axios from "axios";
+import { DbSearchResult } from "./types";
 type GlobalContextType = {
   query: string;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
-  results: SearchCategory[];
-  setResults: React.Dispatch<React.SetStateAction<SearchCategory[]>>;
+  results: DbSearchResult[];
+  setResults: React.Dispatch<React.SetStateAction<DbSearchResult[]>>;
 };
 
 
@@ -21,7 +22,7 @@ export const GlobalContextProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [query, setQuery] = useState<string>("");
 
-  const [results, setResults] = useState<SearchCategory[]>([]);
+  const [results, setResults] = useState<DbSearchResult[]>([]);
 
   let globalContextValue = {
     query,
@@ -35,28 +36,19 @@ export const GlobalContextProvider: React.FC<{ children: ReactNode }> = ({
       .get("http://localhost:3002/search", { params: { query } })
       .then((response: any) => {
         const data = response.data;
-
         if (data === null){
           return
         }
-        // const updatedResults = data.map((value:DbSearchCategory ) => {
-        //   let { boundValues, ...rest } = value;
-        //   console.log(boundValues,  rest, value )
-        //   // boundValues = JSON.parse (boundValues, );
-        //   return {
-        //     ...rest,
-        //     boundValues: boundValues,
-        //   };
-        // });
-        console.log('data', data)
         setResults(data);
 
-        // Handle the response
       })
       .catch((error: any) => {
         throw new Error('problem with fetching data')
       });
-  }, [query ]);
+
+
+
+  }, [query]);
 
 
 

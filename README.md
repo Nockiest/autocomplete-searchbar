@@ -1,3 +1,12 @@
+# What it is
+An updated version of my js search bar using react. 
+
+What have I improved:
+- Added typechecks
+- Fixed bugs
+- improved design
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
